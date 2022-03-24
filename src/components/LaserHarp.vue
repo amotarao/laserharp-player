@@ -39,6 +39,11 @@ const handleTouchEnd = (event) => {
   touching.value = false;
   setTouchPosition(event);
 };
+
+const audio = ref();
+const handleClickPlay = () => {
+  audio.value.play();
+}
 </script>
 
 <template>
@@ -56,6 +61,8 @@ const handleTouchEnd = (event) => {
     <div class="controller">
       <input type="radio" name="mode" v-model="mode" value="full" />
       <input type="radio" name="mode" v-model="mode" value="touch" />
+      <button @click="handleClickPlay">音声が流れないときに1回押す</button>
+      <audio ref="audio" src="https://dotup.org/uploda/dotup.org2756920.mp3" />
     </div>
   </div>
 </template>
