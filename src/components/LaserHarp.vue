@@ -50,7 +50,7 @@ const handleTouchEnd = (event) => {
       <HarpLine class="line" :touching="touching" :pointerRect="pointerRect"></HarpLine>
       <HarpLine class="line" :touching="touching" :pointerRect="pointerRect"></HarpLine>
     </div>
-    <div v-show="touching" ref="pointer" class="pointer" :style="{ top: `${touchPosition.y}px`, left: `${touchPosition.x}px` }">ここ</div>
+    <div v-show="touching" ref="pointer" class="pointer" :style="{ top: `${touchPosition.y}px`, left: `${touchPosition.x}px` }"></div>
   </div>
 </template>
 
@@ -133,7 +133,7 @@ const handleTouchEnd = (event) => {
 }
 
 .pointer {
-  background: #fff;
+  background: #000;
   transform: translate(-50%, -50%);
   width: 40px;
   height: 40px;
