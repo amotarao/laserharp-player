@@ -2,6 +2,8 @@
 import { computed,  ref } from 'vue';
 import HarpLine from './HarpLine.vue';
 
+const mode = ref('full');
+
 const touching = ref(false);
 const touchPosition = ref({ x: 0, y: 0 });
 
@@ -43,14 +45,18 @@ const handleTouchEnd = (event) => {
   <div class="wrapper" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
     <div class="body"></div>
     <div class="line-wrapper">
-      <HarpLine class="line" :touching="touching" :pointerRect="pointerRect"></HarpLine>
-      <HarpLine class="line" :touching="touching" :pointerRect="pointerRect"></HarpLine>
-      <HarpLine class="line" :touching="touching" :pointerRect="pointerRect"></HarpLine>
-      <HarpLine class="line" :touching="touching" :pointerRect="pointerRect"></HarpLine>
-      <HarpLine class="line" :touching="touching" :pointerRect="pointerRect"></HarpLine>
-      <HarpLine class="line" :touching="touching" :pointerRect="pointerRect"></HarpLine>
+      <HarpLine class="line" :mode="mode" audioSrc="https://dotup.org/uploda/dotup.org2756920.mp3" :touching="touching" :pointerRect="pointerRect"></HarpLine>
+      <HarpLine class="line" :mode="mode" audioSrc="https://dotup.org/uploda/dotup.org2756923.mp3" :touching="touching" :pointerRect="pointerRect"></HarpLine>
+      <HarpLine class="line" :mode="mode" audioSrc="https://dotup.org/uploda/dotup.org2756924.mp3" :touching="touching" :pointerRect="pointerRect"></HarpLine>
+      <HarpLine class="line" :mode="mode" audioSrc="https://dotup.org/uploda/dotup.org2756925.mp3" :touching="touching" :pointerRect="pointerRect"></HarpLine>
+      <HarpLine class="line" :mode="mode" audioSrc="https://dotup.org/uploda/dotup.org2756920.mp3" :touching="touching" :pointerRect="pointerRect"></HarpLine>
+      <HarpLine class="line" :mode="mode" audioSrc="https://dotup.org/uploda/dotup.org2756923.mp3" :touching="touching" :pointerRect="pointerRect"></HarpLine>
     </div>
     <div v-show="touching" ref="pointer" class="pointer" :style="{ top: `${touchPosition.y}px`, left: `${touchPosition.x}px` }"></div>
+    <div class="controller">
+      <input type="radio" name="mode" v-model="mode" value="full" />
+      <input type="radio" name="mode" v-model="mode" value="touch" />
+    </div>
   </div>
 </template>
 
@@ -139,5 +145,14 @@ const handleTouchEnd = (event) => {
   height: 40px;
   border-radius: 9999px;
   position: absolute;
+}
+
+.controller {
+  z-index: 2;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 48px;
 }
 </style>

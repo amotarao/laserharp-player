@@ -2,6 +2,14 @@
 import { defineProps, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 
 const props = defineProps({
+  mode: {
+    type: String,
+    required: true,
+  },
+  audioSrc: {
+    type: String,
+    required: true,
+  },
   touching: {
     type: Boolean,
     default: false,
@@ -45,8 +53,38 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener('resize', calcLineRect);
 });
+
+const audio = ref();
+
+watch(playing, (playing) => {
+  if (props.mode === 'touch') {
+    if (playing) {
+      audio.value.currentTime = 0;
+      audio.value.play();
+    } else {
+      audio.value.pause();
+    }
+  }
+  if (props.mode === 'full') {
+    if (playing) {
+      audio.value.currentTime = 0;
+      audio.value.play();
+    }
+  }
+});
+
+const handleEnded = () => {
+  if (props.mode === 'touch') {
+    if (playing.value) {
+      audio.value.currentTime = 0;
+      audio.value.play();
+    }
+  }
+}
 </script>
 
 <template>
-  <div ref="line" :data-active="playing"></div>
+  <div ref="line" :data-active="playing">
+    <audio ref="audio" :src="audioSrc" @ended="handleEnded" />
+  </div>
 </template>
