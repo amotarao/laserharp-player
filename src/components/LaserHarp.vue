@@ -7,15 +7,16 @@ const mode = ref('full');
 const touching = ref(false);
 const touchPosition = ref({ x: 0, y: 0 });
 
-const pointer = ref();
+// const pointer = ref();
 const pointerRect = computed(() => {
-  const size = 40;
+  const width = 16;
+  const height = 64;
 
   return {
-    top: Math.round(touchPosition.value.y - size / 2),
-    right: Math.round(touchPosition.value.x + size / 2),
-    bottom: Math.round(touchPosition.value.y + size / 2),
-    left: Math.round(touchPosition.value.x - size / 2),
+    top: Math.round(touchPosition.value.y - height / 2),
+    right: Math.round(touchPosition.value.x + width / 2),
+    bottom: Math.round(touchPosition.value.y + height / 2),
+    left: Math.round(touchPosition.value.x - width / 2),
   }
 });
 
@@ -48,21 +49,23 @@ const handleClickPlay = () => {
 
 <template>
   <div class="wrapper" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
-    <div class="body"></div>
-    <div class="line-wrapper">
-      <HarpLine class="line" :mode="mode" audioSrc="https://dotup.org/uploda/dotup.org2756920.mp3" :touching="touching" :pointerRect="pointerRect"></HarpLine>
-      <HarpLine class="line" :mode="mode" audioSrc="https://dotup.org/uploda/dotup.org2756923.mp3" :touching="touching" :pointerRect="pointerRect"></HarpLine>
-      <HarpLine class="line" :mode="mode" audioSrc="https://dotup.org/uploda/dotup.org2756924.mp3" :touching="touching" :pointerRect="pointerRect"></HarpLine>
-      <HarpLine class="line" :mode="mode" audioSrc="https://dotup.org/uploda/dotup.org2756925.mp3" :touching="touching" :pointerRect="pointerRect"></HarpLine>
-      <HarpLine class="line" :mode="mode" audioSrc="https://dotup.org/uploda/dotup.org2756920.mp3" :touching="touching" :pointerRect="pointerRect"></HarpLine>
-      <HarpLine class="line" :mode="mode" audioSrc="https://dotup.org/uploda/dotup.org2756923.mp3" :touching="touching" :pointerRect="pointerRect"></HarpLine>
+    <div class="body">
+      <img src="@/assets/body.svg" width="200" height="480" />
     </div>
-    <div v-show="touching" ref="pointer" class="pointer" :style="{ top: `${touchPosition.y}px`, left: `${touchPosition.x}px` }"></div>
+    <div class="line-wrapper">
+      <HarpLine class="line" :mode="mode" position="left" audioSrc="https://dotup.org/uploda/dotup.org2756920.mp3" :touching="touching" :pointerRect="pointerRect"></HarpLine>
+      <HarpLine class="line" :mode="mode" position="right" audioSrc="https://dotup.org/uploda/dotup.org2756923.mp3" :touching="touching" :pointerRect="pointerRect"></HarpLine>
+      <HarpLine class="line" :mode="mode" position="left" audioSrc="https://dotup.org/uploda/dotup.org2756924.mp3" :touching="touching" :pointerRect="pointerRect"></HarpLine>
+      <HarpLine class="line" :mode="mode" position="right" audioSrc="https://dotup.org/uploda/dotup.org2756925.mp3" :touching="touching" :pointerRect="pointerRect"></HarpLine>
+      <HarpLine class="line" :mode="mode" position="left" audioSrc="https://dotup.org/uploda/dotup.org2756920.mp3" :touching="touching" :pointerRect="pointerRect"></HarpLine>
+      <HarpLine class="line" :mode="mode" position="right" audioSrc="https://dotup.org/uploda/dotup.org2756923.mp3" :touching="touching" :pointerRect="pointerRect"></HarpLine>
+    </div>
+    <!-- <div v-show="touching" ref="pointer" class="pointer" :style="{ top: `${touchPosition.y}px`, left: `${touchPosition.x}px` }"></div> -->
     <div class="controller">
       <input type="radio" name="mode" v-model="mode" value="full" />
       <input type="radio" name="mode" v-model="mode" value="touch" />
       <button @click="handleClickPlay">音声が流れないときに1回押す</button>
-      <audio ref="audio" src="https://dotup.org/uploda/dotup.org2756920.mp3" />
+      <audio ref="audio" src="/audio-muted.mp3" />
     </div>
   </div>
 </template>
@@ -78,18 +81,23 @@ const handleClickPlay = () => {
 }
 
 .body {
-  background: #D3D3D3;
   color: #333;
-  width: 20%;
+  width: 70%;
   height: 100%;
   position: absolute;
-  top: 0;
+  bottom: 0;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1;
-
   display: grid;
   place-items: center;
+}
+
+.body img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
 }
 
 .line-wrapper {
@@ -107,7 +115,7 @@ const handleClickPlay = () => {
   --color3: green;
   --color4: darkgreen;
 
-  width: 40%;
+  width: 50%;
   height: 4px;
   background: var(--color);
   box-shadow: 
@@ -118,10 +126,6 @@ const handleClickPlay = () => {
   position: absolute;
 }
 
-.line[data-active='true'] {
-  --color: red;
-}
-
 .line:nth-of-type(1),
 .line:nth-of-type(2) {
   top: 30%;
@@ -129,16 +133,17 @@ const handleClickPlay = () => {
 
 .line:nth-of-type(3),
 .line:nth-of-type(4) {
-  top: 50%;
+  top: 48%;
 }
 
 .line:nth-of-type(5),
 .line:nth-of-type(6) {
-  top: 70%;
+  top: 66%;
 }
 
 .line:nth-of-type(odd) {
   left: 0;
+  width: 45%;
 }
 
 .line:nth-of-type(even) {
@@ -148,8 +153,8 @@ const handleClickPlay = () => {
 .pointer {
   background: #000;
   transform: translate(-50%, -50%);
-  width: 40px;
-  height: 40px;
+  width: 16px;
+  height: 64px;
   border-radius: 9999px;
   position: absolute;
 }

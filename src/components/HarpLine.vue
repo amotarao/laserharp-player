@@ -1,10 +1,16 @@
 <script setup>
-import { defineProps, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { computed, defineProps, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 
 const props = defineProps({
   mode: {
     type: String,
     required: true,
+    validator: (value) => ['full', 'touch'].includes(value),
+  },
+  position: {
+    type: String,
+    required: true,
+    validator: (value) => ['left', 'right'].includes(value),
   },
   audioSrc: {
     type: String,
@@ -81,10 +87,25 @@ const handleEnded = () => {
     }
   }
 }
+
+const coverStyle = computed(() => {
+const isRight = props.position === 'right';
+
+  return {
+    background: '#000',
+    position: 'absolute',
+    top: '-80px',
+    right: isRight ? '0px' : undefined,
+    bottom: '-80px',
+    left: isRight ? undefined : '0px',
+    width: isRight ? `calc(100vw - ${props.pointerRect.right}px)` : `${props.pointerRect.left}px`,
+  };
+});
 </script>
 
 <template>
   <div ref="line" :data-active="playing">
     <audio ref="audio" :src="audioSrc" @ended="handleEnded" />
+    <div v-if="touching && playing" class="cover" :style="coverStyle"></div>
   </div>
 </template>
